@@ -1,7 +1,7 @@
 {
-	"id": "message_service",
-	"version": "1.0.0",
-	"description": "Send alert messages to backend users",
-	"categories": ["message", "community"],
-	"compatible_from": "2018.3"
+  "id": "message_service",
+  "version": "1.0.1",
+  "description": "Send alert messages to backend users",
+  "categories": ["message", "community"],
+  "compatible_from": "2019.3.1"
 }

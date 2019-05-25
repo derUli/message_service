@@ -2,7 +2,7 @@
 use UliCMS\HTML\Script;
 use UliCMS\Security\PermissionChecker;
 use UliCMS\HTML\ListItem;
-use UliCMS\Exceptions\NotImplementedException;
+use UliCMS\Helpers\ArrayHelper;
 
 class MessageServiceController extends MainClass
 {

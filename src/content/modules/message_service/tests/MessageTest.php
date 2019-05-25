@@ -1,28 +1,24 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
-use UliCMS\Exceptions\NotImplementedException;
+use UliCMS\Helpers\ArrayHelper;
 
-class ArrayHelperTest extends TestCase
-{
+class ArrayHelperTest extends TestCase {
 
-    public function setUp()
-    {
+    public function setUp() {
         $this->clean();
     }
 
-    public function tearDown()
-    {
+    public function tearDown() {
         $this->clean();
     }
 
-    public function clean()
-    {
+    public function clean() {
         Database::deleteFrom("users", "username like 'testuser%'");
         Database::truncateTable("messages");
     }
 
-    private function setUpTestuser1()
-    {
+    private function setUpTestuser1() {
         $user = new User();
         $user->setUsername("testuser1");
         $user->setFirstname("Max");
@@ -31,18 +27,15 @@ class ArrayHelperTest extends TestCase
         $user->setPassword("password123");
         $user->setEmail("max@muster.de");
         $user->setHomepage("http://www.google.de");
-        $user->setSkypeId("deruliimnetz");
         $user->setDefaultLanguage("fr");
         $user->setHTMLEditor("ckeditor");
-        $user->setTwitter("ulicms");
         $user->setAboutMe("hello world");
         $user->setLastLogin(time());
         $user->save();
         return $user;
     }
 
-    private function setUpTestuser2()
-    {
+    private function setUpTestuser2() {
         $user = new User();
         $user->setUsername("testuser2");
         $user->setFirstname("John");
@@ -51,18 +44,15 @@ class ArrayHelperTest extends TestCase
         $user->setPassword("password123");
         $user->setEmail("max@muster.de");
         $user->setHomepage("http://www.google.de");
-        $user->setSkypeId("deruliimnetz");
         $user->setDefaultLanguage("fr");
         $user->setHTMLEditor("ckeditor");
-        $user->setTwitter("ulicms");
         $user->setAboutMe("hello world");
         $user->setLastLogin(time());
         $user->save();
         return $user;
     }
 
-    private function setUpTestuser3()
-    {
+    private function setUpTestuser3() {
         $user = new User();
         $user->setUsername("testuser3");
         $user->setFirstname("John");
@@ -71,22 +61,19 @@ class ArrayHelperTest extends TestCase
         $user->setPassword("password123");
         $user->setEmail("max@muster.de");
         $user->setHomepage("http://www.google.de");
-        $user->setSkypeId("deruliimnetz");
         $user->setDefaultLanguage("fr");
         $user->setHTMLEditor("ckeditor");
-        $user->setTwitter("ulicms");
         $user->setAboutMe("hello world");
         $user->setLastLogin(time());
         $user->save();
         return $user;
     }
 
-    public function testCreateUpdateAndDeleteMessage()
-    {
+    public function testCreateUpdateAndDeleteMessage() {
         $testUser1 = $this->setUpTestuser1();
         $testUser2 = $this->setUpTestuser2();
         $testUser3 = $this->setUpTestuser3();
-        
+
         // Create
         $message = new Message();
         // FIXME. receiver and sender should be different users
@@ -94,46 +81,46 @@ class ArrayHelperTest extends TestCase
         $message->setReceiverId($testUser2->getId());
         $message->setMessage("Foo Bar");
         $message->send();
-        
+
         $this->assertNotNull($message->getID());
-        
+
         $id = $message->getID();
-        
+
         $message = new Message($id);
         $this->assertNotNull($message->getID());
         $this->assertEquals("Foo Bar", $message->getMessage());
-        
+
         $this->assertEquals($testUser1->getId(), $message->getSenderId());
         $this->assertEquals($testUser2->getId(), $message->getReceiverId());
-        
+
         $this->assertEquals($testUser1->getId(), $message->getSender()
-            ->getId());
+                        ->getId());
         $this->assertEquals($testUser2->getId(), $message->getReceiver()
-            ->getId());
-        
+                        ->getId());
+
         // Update
-        
+
         $message->setSenderId($testUser2->getId());
         $message->setReceiverId($testUser3->getId());
         $message->setMessage("Another Test");
         $message->send();
-        
+
         $message = new Message($id);
-        
+
         $this->assertEquals("Another Test", $message->getMessage());
-        
+
         $this->assertEquals($testUser2->getId(), $message->getSenderId());
         $this->assertEquals($testUser3->getId(), $message->getReceiverId());
-        
+
         $this->assertEquals($testUser2->getId(), $message->getSender()
-            ->getId());
+                        ->getId());
         $this->assertEquals($testUser3->getId(), $message->getReceiver()
-            ->getId());
-        
+                        ->getId());
+
         // Delete
         $message->delete();
         $this->assertNull($message->getID());
-        
+
         $message = new Message($id);
         $this->assertNull($message->getID());
         $this->assertNull($message->getMessage());
@@ -141,15 +128,14 @@ class ArrayHelperTest extends TestCase
         $this->assertNull($message->getReceiverId());
         $this->assertNull($message->getSender());
         $this->assertNull($message->getReceiver());
-        
+
         $this->clean();
     }
 
-    public function testGetAll()
-    {
+    public function testGetAll() {
         $testUser1 = $this->setUpTestuser1();
         $testUser2 = $this->setUpTestuser2();
-        
+
         for ($i = 1; $i <= 4; $i ++) {
             // Create
             $message = new Message();
@@ -160,18 +146,17 @@ class ArrayHelperTest extends TestCase
             $message->send();
         }
         $allMessages = Message::getAll();
-        
+
         $this->assertCount(4, $allMessages);
-        
+
         $this->clean();
     }
 
-    public function testGetAllWithReceiver()
-    {
+    public function testGetAllWithReceiver() {
         $testUser1 = $this->setUpTestuser1();
         $testUser2 = $this->setUpTestuser2();
         $testUser3 = $this->setUpTestuser3();
-        
+
         for ($i = 1; $i <= 4; $i ++) {
             // Create
             $message = new Message();
@@ -181,7 +166,7 @@ class ArrayHelperTest extends TestCase
             $message->setMessage("Message $i");
             $message->send();
         }
-        
+
         for ($i = 1; $i <= 2; $i ++) {
             // Create
             $message = new Message();
@@ -192,10 +177,11 @@ class ArrayHelperTest extends TestCase
             $message->send();
         }
         $allMessages = Message::getAllWithReceiver($testUser3->getId());
-        
+
         $this->assertCount(2, $allMessages);
-        
+
         $this->clean();
     }
+
     // TODO: Test javascript generate for alerts
 }

@@ -1,20 +1,17 @@
 {
-	"source": "extend",
-	"version": "1.0.0",
-	"embed": false,
-	"controllers": {
-		"MessageServiceController": "controllers/MessageServiceController.php"
-	},
-	"controller_function_permissions": {
-		"MessageServiceController::sendMessage": "send_messages"
-	},
-	"objects": {
-		"Message": "objects/Message.php"
-	},
-	"main_class": "MessageServiceController",
-	"custom_acl": [
-		"receive_messages",
-		"send_messages"
-	],
-	"admin_permission": "send_messages"
+  "source": "extend",
+  "version": "1.0.1",
+  "embed": false,
+  "controllers": {
+    "MessageServiceController": "controllers/MessageServiceController.php"
+  },
+  "controller_function_permissions": {
+    "MessageServiceController::sendMessage": "send_messages"
+  },
+  "objects": {
+    "Message": "objects/Message.php"
+  },
+  "main_class": "MessageServiceController",
+  "custom_acl": ["receive_messages", "send_messages"],
+  "admin_permission": "send_messages"
 }
