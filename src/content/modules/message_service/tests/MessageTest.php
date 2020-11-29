@@ -5,11 +5,11 @@ use UliCMS\Helpers\ArrayHelper;
 
 class ArrayHelperTest extends TestCase {
 
-    public function setUp() {
+    protected function setUp(): void {
         $this->clean();
     }
 
-    public function tearDown() {
+    protected function tearDown(): void {
         $this->clean();
     }
 

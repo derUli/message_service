@@ -44,7 +44,7 @@ class MessageServiceController extends MainClass
         $userManager = new UserManager();
         
         $userList = array();
-        $users = $userManager->getLockedUsers(false, "username");
+        $users = $userManager->isLockedUsers(false, "username");
         foreach ($users as $user) {
             $permissionChecker = new PermissionChecker($user->getId());
             if ($permissionChecker->hasPermission("receive_messages")) {
